@@ -46,13 +46,14 @@ export default function LoginPage() {
           router.push("/guru");
           break;
         case "MURID":
-          router.push("/murid");
+          router.push("/siswa");
           break;
         case "WAKAKURI":
-          router.push("/wakakur");
+          router.push("/petugas");
           break;
+
         case "KEPSEK":
-          router.push("/kepsek");
+          router.push("/petugas");
           break;
         default:
           setError("Role pengguna tidak dikenali");

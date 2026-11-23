@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 
 import { connectDB } from "../../lib/mongodb";
 import User from "../../models/User";
+import LoginLog from "../../models/LoginLog";
 
 export async function POST(request: Request) {
     try {
@@ -65,6 +66,18 @@ export async function POST(request: Request) {
                 expiresIn: "1d",
             }
         );
+
+        // Catat histori login (tidak menggagalkan proses login kalau ini error)
+        try {
+            await LoginLog.create({
+                userId: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+            });
+        } catch (logError) {
+            console.error("Gagal mencatat login log:", logError);
+        }
 
         const response = NextResponse.json({
             success: true,

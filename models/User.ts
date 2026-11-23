@@ -5,6 +5,10 @@ export interface IUser extends Document {
   email: string;
   password: string;
   role: "ADMIN" | "GURU" | "MURID" | "WAKAKURI" | "KEPSEK";
+  status: "ACTIVE" | "OFFLINE" | "SUSPENDED";
+  kelas?: string; // untuk MURID: kelas siswa, untuk GURU: kelas yang diampu (opsional)
+  mapel?: string; // untuk GURU: mata pelajaran yang diajar
+  jabatan?: string; // untuk WAKAKURI/KEPSEK: nama jabatan
 }
 
 const UserSchema = new Schema<IUser>(
@@ -30,14 +34,29 @@ const UserSchema = new Schema<IUser>(
 
     role: {
       type: String,
-      enum: [
-        "ADMIN",
-        "GURU",
-        "MURID",
-        "WAKAKURI",
-        "KEPSEK",
-      ],
+      enum: ["ADMIN", "GURU", "MURID", "WAKAKURI", "KEPSEK"],
       default: "MURID",
+    },
+
+    status: {
+      type: String,
+      enum: ["ACTIVE", "OFFLINE", "SUSPENDED"],
+      default: "ACTIVE",
+    },
+
+    kelas: {
+      type: String,
+      trim: true,
+    },
+
+    mapel: {
+      type: String,
+      trim: true,
+    },
+
+    jabatan: {
+      type: String,
+      trim: true,
     },
   },
   {
@@ -45,8 +64,6 @@ const UserSchema = new Schema<IUser>(
   }
 );
 
-const User =
-  mongoose.models.User ||
-  mongoose.model<IUser>("User", UserSchema);
+const User = mongoose.models.User || mongoose.model<IUser>("User", UserSchema);
 
 export default User;
